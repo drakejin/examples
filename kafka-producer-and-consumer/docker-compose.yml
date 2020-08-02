@@ -58,7 +58,7 @@ services:
     hostname: zoonavigator-web
     container_name: zoonavigator-web
     ports:
-      - "8004:8000"
+      - "8000:8000"
     environment:
       API_HOST: "zoonavigator-api"
       API_PORT: 9000
@@ -153,12 +153,12 @@ services:
 
 
   # 개요: kafka-schema-registry 이걸 좀 더 쉽게 다루기 위해 존재하는 web ui 툴
-  schema-registry-ui:
+  kafka-schema-registry-ui:
     image: landoop/schema-registry-ui:latest
     hostname: kafka-schema-registry-ui
     container_name: kafka-schema-registry-ui
     ports:
-      - "8001:8000"
+      - "8003:8000"
     environment:
       SCHEMAREGISTRY_URL: http://kafka-schema-registry:8081
       PROXY: "true"
@@ -192,7 +192,7 @@ services:
     hostname: kafka-topics-ui
     container_name: kafka-topics-ui
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       KAFKA_REST_PROXY_URL: http://kafka-rest-proxy:8082
       PROXY: "true"
@@ -255,7 +255,7 @@ services:
     hostname: kafka-cmak
     container_name: kafka-cmak
     ports:
-      - "8003:9000"
+      - "8004:9000"
     environment:
       ZK_HOSTS: "zookeeper-1:2181"
       APPLICATION_SECRET: "random-secret"

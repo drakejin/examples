@@ -200,7 +200,7 @@ services:
       - kafka-rest-proxy
 
   # ============================================================= Kafka Connector ========================================================================
-
+  # TIP: You have to see what there are binary files for kafka, utilities or zookeeper CLIs. It's really useful.
   kafka-connect:
     image: confluentinc/cp-kafka-connect:latest
     hostname: kafka-connect

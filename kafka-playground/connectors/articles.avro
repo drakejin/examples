@@ -1,0 +1,71 @@
+{
+  "namespace": "ksql",
+  "name": "articles",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "long",
+        "arg.properties": {
+          "range": {
+            "min": 0,
+            "max": 1519273364600
+          }
+        }
+      }
+    },
+    {
+      "name": "user_id",
+      "type": {
+        "type": "long",
+        "arg.properties": {
+          "range": {
+            "min": 0,
+            "max": 1519273364600
+          }
+        }
+      }
+    },
+    {
+      "name": "title",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+            "regex": "제목 제목 제목!_[1-9]{0,1}"
+        }
+      }
+    },
+    {
+      "name": "contents",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+            "regex": "내용 내용 내용!_[1-9]{0,1}"
+        }
+      }
+    },
+    {
+      "name": "region_id",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+            "regex": "Region_[1-9]?"
+        }
+      }
+    },
+    {
+      "name": "type",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "BUSINESS",
+            "FLEEMARKET",
+            "LIFESTORY"
+          ]
+        }
+      }
+    }
+  ]
+}

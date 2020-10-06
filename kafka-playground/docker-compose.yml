@@ -117,6 +117,92 @@ services:
       CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components,/etc/kafka-connect/jars
       CONNECT_LOG4J_LOGGERS: org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR
     volumes:
-      - ./connectors:/usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen/etc/custom
+      - ./kafka-connect:/usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen/etc/custom
     depends_on:
       - kafka-schema-registry
+  
+  
+  # ================================ Elastic Stack ================================
+  elasticsearch:
+    image: elasticsearch:7.8.1
+    hostname: elasticsearch
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+    environment:
+      - cluster.name=cluster
+      - network.host=0.0.0.0
+      - node.name=elasitcsearch-standalone
+      - discovery.type=single-node
+      - node.master=true
+      - node.data=true
+    depends_on:
+      - kafka-connect-datagen
+
+  kibana:
+    image: kibana:7.8.1
+    container_name: kibana
+    hostname: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - xpack.security.enabled=true
+      - server.host=0.0.0.0
+      - xpack.reporting.kibanaServer.hostname=0.0.0.0
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.8.1
+    container_name: metricbeat
+    hostname: metricbeat
+    user: root
+    volumes:
+      - ./elastic/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup/:/hostfs/sys/fs/cgroup:ro
+      - /proc/:/hostfs/proc/:ro
+      - /:/hostfs:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - KIBANA_HOST=kibana:5601
+    depends_on:
+      - kibana
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.8.1
+    container_name: filebeat
+    hostname: filebeat
+    user: root
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup/:/hostfs/sys/fs/cgroup:ro
+      - /proc/:/hostfs/proc/:ro
+      - /:/hostfs:ro
+    environment:
+      - setup.kibana.host=kibana:5601
+      - output.elasticsearch.hosts=["elasticsearch:9200"]  
+    depends_on:
+      - kibana
+
+  logstash:
+    # https://www.elastic.co/guide/en/logstash/current/config-setting-files.html
+    image: logstash:7.8.1
+    hostname: logstash
+    container_name: logstash
+    ports:
+      - 9600:9600
+    volumes:
+      - ./elastic/logstash:/usr/share/logstash/pipeline
+    environment:
+      - http.host=0.0.0.0
+      - LOG_LEVEL=debug
+    depends_on:
+      - elasticsearch
+  
+
+      https://www.sarulabs.com/post/5/2019-08-12/sending-docker-logs-to-elasticsearch-and-kibana-with-filebeat.html

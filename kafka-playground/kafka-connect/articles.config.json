@@ -3,7 +3,7 @@
   "config": {
     "connector.class": "io.confluent.kafka.connect.datagen.DatagenConnector",
     "kafka.topic": "articles",
-    "schema.filename": "/usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen/etc/custom/articles.avro",
+    "schema.filename": "/usr/share/confluent-hub-components/confluentinc-kafka-connect-datagen/etc/custom/articles.avdl",
     "schema.keyfield": "id",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",

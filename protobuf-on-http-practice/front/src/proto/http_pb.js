@@ -338,7 +338,8 @@ proto.drakejin.examples.http.Request.Name = {
   UNKNOWN: 0,
   REQUEST_A: 1,
   REQUEST_B: 2,
-  REQUEST_C: 3
+  REQUEST_C: 3,
+  REQUEST_D: 4
 };
 
 /**

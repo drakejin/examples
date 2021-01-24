@@ -13,17 +13,20 @@ message Request {
     REQUEST_A = 1;
     REQUEST_B = 2;
     REQUEST_C = 3;
+    REQUEST_D = 4;
   }
 
   RequestA req_a = 100;
   RequestB req_b = 101;
   RequestC req_c = 102;
+  // RequestD req_d = 103;
 }
 
 message Response {
   ResponseA res_a = 100;
   ResponseB res_b = 101;
   ResponseC res_c = 102;
+  // ResponseD res_d = 103;
 }
 
 // req/res A
@@ -49,3 +52,10 @@ message RequestC {
 message ResponseC {
   string query = 1;
 }
+
+// message RequestD {
+//   string query = 1;
+// }
+// message ResponseD {
+//   string query = 1;
+// }

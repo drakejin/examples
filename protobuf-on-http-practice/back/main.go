@@ -38,6 +38,11 @@ func main() {
 
 			res := doSomeLogic(req)
 
+			fmt.Println("----------- Request ----------------- ")
+			fmt.Println(req)
+			fmt.Println("----------- Response ----------------- ")
+			fmt.Println(res)
+
 			return sendResponse(ctx, res)
 		}
 	}())
@@ -61,10 +66,10 @@ func doSomeLogic(req *pbhttp.Request) *pbhttp.Response {
 		res.ResC = &pbhttp.ResponseC{}
 		res.ResC.Query = fmt.Sprintf("%s%s", req.ReqC.Query, "-ReqC")
 	}
-	fmt.Println("----------- Request ----------------- ")
-	fmt.Println(req)
-	fmt.Println("----------- Response ----------------- ")
-	fmt.Println(res)
+	// if req.ReqD != nil {
+	// 	res.ResD = &pbhttp.ResponseD{}
+	// 	res.ResD.Query = fmt.Sprintf("%s%s", req.ReqD.Query, "-ReqD")
+	// }
 	return res
 }
 

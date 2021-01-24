@@ -1,6 +1,7 @@
 import pbhttp from './proto/http_pb';
-import proto from './proto/http.proto';
-import protobuf from 'protobufjs';
+// import proto from './proto/http.proto';
+// import protobuf from 'protobufjs';
+import axios from 'axios'
 import './App.css';
 import React, { useState } from 'react';
 
@@ -50,6 +51,29 @@ function send(query) {
   reqC.setQuery(query)
   req.setReqC(reqC)
 
+  callFetch(req)
+  // callAxios(req)
+}
+
+const callAxios = (req) => {
+  axios.post(
+    "http://0.0.0.0:4100",
+    req.serializeBinary(),
+    {
+      headers: {
+        'Content-Type': 'application/protobuf',
+      },
+      responseType: 'arraybuffer',
+    },
+  ).then((response) => {
+    const bytes = response.data
+    const data = pbhttp.Response.deserializeBinary(bytes).toObject()
+    console.log(data)
+  })
+}
+
+
+const callFetch = (req) => {
   fetch("http://0.0.0.0:4100", {
     method: 'POST',
     headers: {
@@ -57,8 +81,19 @@ function send(query) {
     },
     body: req.serializeBinary()
   })
-  .then(response => {
+  .then(async (response) => {
     console.log(response)
+    const bytes = await response.arrayBuffer()
+    const data = pbhttp.Response.deserializeBinary(bytes).toObject()
+    console.log(data)
+  })
+}
+
+export default App;
+
+
+
+/*
     protobuf.load(proto, function(err, root) {
       if (err) throw err;
 
@@ -67,9 +102,7 @@ function send(query) {
       console.log(ResponseMessage)
 
       // Exemplary payload
-      // var payload = new Uint8Array(response.arrayBuffer)
-      // var payload = response.arrayBuffer
-      var payload = response.body
+      var payload = pbhttp.Response.deserializeBinary(bytes).toObject()
 
       console.log(payload)
       var errMsg = ResponseMessage.verify(payload);
@@ -77,15 +110,15 @@ function send(query) {
 
       // case1
       var message = ResponseMessage.create(payload); // or use .fromObject if conversion is necessary
-      console.log(message.toJSON())
+      console.log("case1", message.toJSON())
 
       // case2
       var buffer = ResponseMessage.encode(message).finish();
-      console.log(buffer)
+      console.log("case2", buffer)
 
       // case3
       var decoded = ResponseMessage.decode(buffer);
-      console.log(decoded.toJSON())
+      console.log("case3", decoded.toJSON())
 
 
       // case4: Maybe convert the message back to a plain object
@@ -95,9 +128,8 @@ function send(query) {
           bytes: String,
           // see ConversionOptions
       });
-      console.log(object)
+      console.log("case4", object)
     })
   });
-}
 
-export default App;
+  */

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package drakejin.examples.http;
+
+option go_package = "proto/http";
+option java_multiple_files = true;
+option java_outer_classname = "HTTP";
+option java_package = "com.drakejin.examples.http";
+
+message Request {
+  enum Name {
+    UNKNOWN = 0;
+    REQUEST_A = 1;
+    REQUEST_B = 2;
+    REQUEST_C = 3;
+  }
+
+  RequestA req_a = 100;
+  RequestB req_b = 101;
+  RequestC req_c = 102;
+}
+
+message Response {
+  ResponseA res_a = 100;
+  ResponseB res_b = 101;
+  ResponseC res_c = 102;
+}
+
+// req/res A
+message RequestA {
+  string query = 1;
+}
+message ResponseA {
+  string query = 1;
+}
+
+// req/res B
+message RequestB {
+  string query = 1;
+}
+message ResponseB {
+  string query = 1;
+}
+
+// req/res C
+message RequestC {
+  string query = 1;
+}
+message ResponseC {
+  string query = 1;
+}

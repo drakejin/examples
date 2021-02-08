@@ -1,3 +1,9 @@
+#### 실행방법
+
+``` bash
+docker-compose up --build -d
+```
+
 # Kafka를 처음 다루는 사람을 위해
 
 kafka의 설치는 `docker-compose.yml` 의 내용을 참고하세요.
